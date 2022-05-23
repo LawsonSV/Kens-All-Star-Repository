@@ -1,49 +1,49 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const AppointmentList = ({
-  appointments,
+const ThoughtList = ({
+  thoughts,
   title,
   showTitle = true,
   showUsername = true,
 }) => {
-  if (!appointments.length) {
-    return <h3>No appointments Yet</h3>;
+  if (!thoughts.length) {
+    return <h3>No Thoughts Yet</h3>;
   }
 
   return (
     <div>
       {showTitle && <h3>{title}</h3>}
-      {appointments &&
-        appointments.map((appointment) => (
-          <div key={appointment._id} className="card mb-3">
+      {thoughts &&
+        thoughts.map((thought) => (
+          <div key={thought._id} className="card mb-3">
             <h4 className="card-header bg-primary text-light p-2 m-0">
               {showUsername ? (
                 <Link
                   className="text-light"
-                  to={`/profiles/${appointment.appointmentAuthor}`}
+                  to={`/profiles/${thought.thoughtAuthor}`}
                 >
-                  {appointment.appointmentAuthor} <br />
+                  {thought.thoughtAuthor} <br />
                   <span style={{ fontSize: '1rem' }}>
-                    had this appointment on {appointment.createdAt}
+                    had this thought on {thought.createdAt}
                   </span>
                 </Link>
               ) : (
                 <>
                   <span style={{ fontSize: '1rem' }}>
-                    You had this appointment on {appointment.createdAt}
+                    You had this thought on {thought.createdAt}
                   </span>
                 </>
               )}
             </h4>
             <div className="card-body bg-light p-2">
-              <p>{appointment.appointmentText}</p>
+              <p>{thought.thoughtText}</p>
             </div>
             <Link
               className="btn btn-primary btn-block btn-squared"
-              to={`/appointments/${appointment._id}`}
+              to={`/thoughts/${thought._id}`}
             >
-              Join the discussion on this appointment.
+              Join the discussion on this thought.
             </Link>
           </div>
         ))}
@@ -51,4 +51,4 @@ const AppointmentList = ({
   );
 };
 
-export default AppointmentList;
+export default ThoughtList;

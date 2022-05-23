@@ -6,7 +6,7 @@ import { ADD_COMMENT } from '../../utils/mutations';
 
 import Auth from '../../utils/auth';
 
-const CommentForm = ({ appointmentId }) => {
+const CommentForm = ({ thoughtId }) => {
   const [commentText, setCommentText] = useState('');
   const [characterCount, setCharacterCount] = useState(0);
 
@@ -18,7 +18,7 @@ const CommentForm = ({ appointmentId }) => {
     try {
       const { data } = await addComment({
         variables: {
-          appointmentId,
+          thoughtId,
           commentText,
           commentAuthor: Auth.getProfile().data.username,
         },
