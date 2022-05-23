@@ -2,24 +2,24 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 
-import { ADD_THOUGHT } from '../../utils/mutations';
-import { QUERY_THOUGHTS, QUERY_ME } from '../../utils/queries';
+import { ADD_APPOINTMENT } from '../../utils/mutations';
+import { QUERY_APPOINTMENTS, QUERY_ME } from '../../utils/queries';
 
 import Auth from '../../utils/auth';
 
-const ThoughtForm = () => {
-  const [thoughtText, setThoughtText] = useState('');
+const AppointmentForm = () => {
+  const [appointmentText, setAppointmentText] = useState('');
 
   const [characterCount, setCharacterCount] = useState(0);
 
-  const [addThought, { error }] = useMutation(ADD_THOUGHT, {
-    update(cache, { data: { addThought } }) {
+  const [addAppointment, { error }] = useMutation(ADD_APPOINTMENT, {
+    update(cache, { data: { addAppointment } }) {
       try {
-        const { thoughts } = cache.readQuery({ query: QUERY_THOUGHTS });
+        const { appointments } = cache.readQuery({ query: QUERY_APPOINTMENTS });
 
         cache.writeQuery({
-          query: QUERY_THOUGHTS,
-          data: { thoughts: [addThought, ...thoughts] },
+          query: QUERY_APPOINTMENTS,
+          data: { appointments: [addAppointment, ...appointments] },
         });
       } catch (e) {
         console.error(e);
@@ -29,7 +29,7 @@ const ThoughtForm = () => {
       const { me } = cache.readQuery({ query: QUERY_ME });
       cache.writeQuery({
         query: QUERY_ME,
-        data: { me: { ...me, thoughts: [...me.thoughts, addThought] } },
+        data: { me: { ...me, appointments: [...me.appointments, addAppointment] } },
       });
     },
   });
@@ -38,14 +38,14 @@ const ThoughtForm = () => {
     event.preventDefault();
 
     try {
-      const { data } = await addThought({
+      const { data } = await addAppointment({
         variables: {
-          thoughtText,
-          thoughtAuthor: Auth.getProfile().data.username,
+          appointmentText,
+          appointmentAuthor: Auth.getProfile().data.username,
         },
       });
 
-      setThoughtText('');
+      setAppointmentText('');
     } catch (err) {
       console.error(err);
     }
@@ -54,8 +54,8 @@ const ThoughtForm = () => {
   const handleChange = (event) => {
     const { name, value } = event.target;
 
-    if (name === 'thoughtText' && value.length <= 280) {
-      setThoughtText(value);
+    if (name === 'appointmentText' && value.length <= 280) {
+      setAppointmentText(value);
       setCharacterCount(value.length);
     }
   };
@@ -79,9 +79,9 @@ const ThoughtForm = () => {
           >
             <div className="col-12 col-lg-9">
               <textarea
-                name="thoughtText"
-                placeholder="Here's a new thought..."
-                value={thoughtText}
+                name="appointmentText"
+                placeholder="Here's a new appointment..."
+                value={appointmentText}
                 className="form-input w-100"
                 style={{ lineHeight: '1.5', resize: 'vertical' }}
                 onChange={handleChange}
@@ -110,4 +110,4 @@ const ThoughtForm = () => {
   );
 };
 
-export default ThoughtForm;
+export default AppointmentForm;
